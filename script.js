@@ -1,9 +1,11 @@
 //const { formSubmission } = require("./scriptHelper");
 
+const { addDestinationInfo, formSubmission } = require("./scriptHelper");
+
 //const { addDestinationInfo } = require("./scriptHelper");
 
 // Write your JavaScript code here!
-window.addEventListener("load", function() {
+/*window.addEventListener("load", function() {
     let form = document.querySelector("form");
     form.addEventListener("submit", function(event){
         event.preventDefault();
@@ -12,11 +14,7 @@ window.addEventListener("load", function() {
         let copilot = document.querySelector("input[name=copilotName]").value;
         let fuelLevel = document.querySelector("input[name=fuelLevel]").value;
         let cargoMass = document.querySelector("input[name=cargoMass]").value;
-        
-       // if (pilot === "" || copilot === "" || fuelLevel === "" || cargoMass === "") {
-            //alert("All fields are required");
-        //};
-
+    
         formSubmission(document, list, pilot, copilot, fuelLevel, cargoMass);
 
     });
@@ -47,3 +45,40 @@ window.addEventListener("load", function() {
 
    
 });
+*/
+
+window.addEventListener('load', function() {
+    let listedPlanets;
+    let listedPlanetsResponse = myFetch();
+
+    listedPlanetsResponsethen(function (response) {
+        listedPlanets = response;
+        console.log(listedPlanets);
+    }).then(function() {
+
+        let chosenPlanet = pickPlanet(listedPlanets);
+        console.log(chosenPlanet);
+
+        let destinationInformation = addDestinationInfo(document, chosenPlanet.name, chosenPlanet.diameter, chosenPlanet.star, chosenPlanet.distance, chosenPlanet.moons, chosenPlanet.image);
+        console.log(destinationInformation);
+
+    });
+
+    let form = document.querySelector('form');
+    let pilotName = document.querySelector("input[name=pilotName]");
+    let copilotName = document.querySelector("input[name=copilotName]");
+    let fuelLevel = document.querySelector("input[name=fuelLevel]");
+    let cargoMass = document.querySelector("input[name=cargoMass]");
+    let listVariable = document.querySelector("#faultyItems");
+    listVariable.style.visibility = "hidden";
+
+    form.addEventListener("submit", function(event) {
+        let formSubmissionSub = formSubmission(window.document, list, pilotName.value, copilotName.value, fuelLevel.value, cargoMass.value);
+        if(!formSubmissionSub) {
+            event.preventDefault();
+        }
+        if(formSubmissionSub) {
+            event.preventDefault();
+        }
+    })
+})
